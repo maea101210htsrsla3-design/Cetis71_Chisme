@@ -20,13 +20,19 @@
 
     .form {
       background-color: #fff;
-      display: block;
+      display: none;
+      flex-direction: column;
+      align-items: center;
       padding: 1rem;
       max-width: 350px;
       border-radius: 0.5rem;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
                   0 4px 6px -2px rgba(0, 0, 0, 0.05);
       margin: 1rem;
+    }
+
+    .form.active {
+      display: flex;
     }
 
     .form-title {
@@ -51,7 +57,6 @@
     .input-container input {
       background-color: #fff;
       padding: 1rem;
-      padding-right: 3rem;
       font-size: 0.875rem;
       line-height: 1.25rem;
       width: 300px;
@@ -88,23 +93,14 @@
     .signup-link a {
       text-decoration: underline;
       color: #4F46E5;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="form">
-    <p class="form-title">Crear cuenta</p>
-    <div class="input-container">
-      <input type="text" id="register-username" placeholder="Usuario">
-    </div>
-    <div class="input-container">
-      <input type="password" id="register-password" placeholder="Contraseña">
-    </div>
-    <button class="submit" onclick="register()">Registrar</button>
-  </div>
-
-  <div class="form">
+  <!-- Formulario de Iniciar Sesión -->
+  <div class="form active" id="login-form">
     <p class="form-title">Iniciar sesión</p>
     <div class="input-container">
       <input type="text" id="login-username" placeholder="Usuario">
@@ -114,11 +110,59 @@
     </div>
     <button class="submit" onclick="login()">Entrar</button>
     <p class="signup-link">
-      ¿Aún no tienes cuenta? <a href="#">Regístrate</a>
+      ¿Aún no tienes cuenta? <a onclick="mostrarRegistro()">Regístrate</a>
     </p>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Formulario de Registro -->
+  <div class="form" id="register-form">
+    <p class="form-title">Crear cuenta</p>
+    <div class="input-container">
+      <input type="text" id="register-username" placeholder="Usuario">
+    </div>
+    <div class="input-container">
+      <input type="password" id="register-password" placeholder="Contraseña">
+    </div>
+    <button class="submit" onclick="register()">Registrar</button>
+    <p class="signup-link">
+      ¿Ya tienes cuenta? <a onclick="mostrarLogin()">Inicia sesión</a>
+    </p>
+  </div>
+
+  <script>
+    // --- Alternar entre login y registro ---
+    function mostrarRegistro() {
+      document.getElementById('login-form').classList.remove('active');
+      document.getElementById('register-form').classList.add('active');
+    }
+
+    function mostrarLogin() {
+      document.getElementById('register-form').classList.remove('active');
+      document.getElementById('login-form').classList.add('active');
+    }
+
+    // --- Ejemplo de funciones (puedes conectar con tu backend después) ---
+    function register() {
+      const username = document.getElementById('register-username').value;
+      const password = document.getElementById('register-password').value;
+      if (username && password) {
+        alert(`Usuario ${username} registrado correctamente ✅`);
+        mostrarLogin();
+      } else {
+        alert('Por favor llena todos los campos');
+      }
+    }
+
+    function login() {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+      if (username && password) {
+        alert(`Bienvenido, ${username}! 😄`);
+        window.location.href = 'chisme.html';
+      } else {
+        alert('Ingresa usuario y contraseña');
+      }
+    }
+  </script>
 </body>
 </html>
-
