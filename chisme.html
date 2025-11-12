@@ -4,16 +4,229 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mis Notas</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4f46e5, #3b82f6);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      color: white;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .container_chat_bot {
+      display: flex;
+      flex-direction: column;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .container_chat_bot .container-chat-options {
+      position: relative;
+      display: flex;
+      background: linear-gradient(
+        to bottom right,
+        #7e7e7e,
+        #363636,
+        #363636,
+        #363636,
+        #363636
+      );
+      border-radius: 16px;
+      padding: 1.5px;
+      overflow: hidden;
+    }
+
+    .container_chat_bot .container-chat-options::after {
+      position: absolute;
+      content: "";
+      top: -10px;
+      left: -10px;
+      background: radial-gradient(
+        ellipse at center,
+        #ffffff,
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0.1),
+        rgba(0, 0, 0, 0)
+      );
+      width: 30px;
+      height: 30px;
+      filter: blur(1px);
+    }
+
+    .container_chat_bot .container-chat-options .chat {
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .container_chat_bot .chat .chat-bot textarea {
+      background-color: transparent;
+      border-radius: 16px;
+      border: none;
+      width: 100%;
+      height: 50px;
+      color: #ffffff;
+      font-family: sans-serif;
+      font-size: 14px;
+      padding: 10px;
+      resize: none;
+      outline: none;
+    }
+
+    .container_chat_bot .chat .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 10px;
+    }
+
+    .btns-add button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      font-size: 18px;
+    }
+
+    .btns-add button:hover {
+      transform: translateY(-3px);
+      color: #ffffff;
+    }
+
+    .btn-submit {
+      padding: 4px 6px;
+      background-image: linear-gradient(to top, #292929, #555555, #292929);
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-submit i {
+      color: #8b8b8b;
+      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    .btn-submit:hover i {
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+
+    /* Lista de notas */
+    #listaNotas {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .nota {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nota p {
+      margin: 0;
+      flex: 1;
+      color: #fff;
+    }
+
+    .nota button {
+      background: transparent;
+      border: none;
+      color: #ff4081;
+      cursor: pointer;
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .nota button:hover {
+      transform: scale(1.2);
+    }
+
+  </style>
 </head>
 <body>
-  <h1>📝 Mis Notas</h1>
-  <textarea id="nota" placeholder="Escribe tu nota..."></textarea>
-  <button onclick="guardarNota()">Guardar Nota</button>
 
-  <h2>Notas guardadas</h2>
+  <h1>📝 Mis Notas</h1>
+
+  <div class="container_chat_bot">
+    <div class="container-chat-options">
+      <div class="chat">
+        <div class="chat-bot">
+          <textarea id="nota" placeholder="Escribe tu nota..."></textarea>
+        </div>
+        <div class="options">
+          <div class="btns-add">
+            <button title="Agregar emoji">😊</button>
+            <button title="Adjuntar archivo">📎</button>
+          </div>
+          <button class="btn-submit" onclick="guardarNota()">
+            <i>➤</i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="listaNotas"></div>
 
-  <script src="app.js"></script>
+  <script>
+    // --- Funciones simuladas (puedes conectar con backend después) ---
+    let notas = [];
+
+    function guardarNota() {
+      const texto = document.getElementById('nota').value.trim();
+      if (texto === '') return alert('Escribe una nota antes de guardar.');
+
+      const nuevaNota = { id: Date.now(), texto, likes: 0 };
+      notas.push(nuevaNota);
+      document.getElementById('nota').value = '';
+      mostrarNotas();
+    }
+
+    function likeNota(id) {
+      const nota = notas.find(n => n.id === id);
+      if (nota) nota.likes++;
+      mostrarNotas();
+    }
+
+    function mostrarNotas() {
+      const contenedor = document.getElementById('listaNotas');
+      contenedor.innerHTML = '';
+
+      notas.forEach(nota => {
+        const div = document.createElement('div');
+        div.className = 'nota';
+        div.innerHTML = `
+          <p>${nota.texto}</p>
+          <button onclick="likeNota(${nota.id})">❤️ ${nota.likes}</button>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+  </script>
 </body>
 </html>
