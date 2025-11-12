@@ -10,93 +10,103 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       background: linear-gradient(135deg, #4f46e5, #3b82f6);
       font-family: 'Segoe UI', sans-serif;
       min-height: 100vh;
       margin: 0;
       color: white;
-      overflow-x: hidden;
+      padding: 20px;
     }
 
     h1 {
-      margin-bottom: 1rem;
       text-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    /* CHAT BOX PRINCIPAL */
-    .container_chat_bot {
+    /* Botón Crear Nota (Uiverse.io) */
+    .boton-crear {
+      align-items: center;
+      background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+      border: 0;
+      border-radius: 8px;
+      box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+      color: #ffffff;
       display: flex;
-      flex-direction: column;
-      max-width: 360px;
-      width: 100%;
+      font-size: 18px;
+      justify-content: center;
+      line-height: 1em;
+      min-width: 160px;
+      padding: 3px;
+      margin: 15px 0;
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
-    .container_chat_bot .container-chat-options {
-      position: relative;
+    .boton-crear span {
+      background-color: rgb(5, 6, 45);
+      padding: 14px 24px;
+      border-radius: 6px;
+      width: 100%;
+      height: 100%;
+      transition: 300ms;
+    }
+
+    .boton-crear:hover span {
+      background: none;
+    }
+
+    .boton-crear:active {
+      transform: scale(0.9);
+    }
+
+    /* CHAT BOX */
+    .container_chat_bot {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+
+    .container-chat-options {
       display: flex;
-      background: linear-gradient(
-        to bottom right,
-        #7e7e7e,
-        #363636,
-        #363636,
-        #363636,
-        #363636
-      );
+      background: linear-gradient(135deg, #5b42f3, #00ddeb);
       border-radius: 16px;
       padding: 1.5px;
       overflow: hidden;
     }
 
-    .container_chat_bot .container-chat-options::after {
-      position: absolute;
-      content: "";
-      top: -10px;
-      left: -10px;
-      background: radial-gradient(
-        ellipse at center,
-        #ffffff,
-        rgba(255, 255, 255, 0.3),
-        rgba(255, 255, 255, 0.1),
-        rgba(0, 0, 0, 0)
-      );
-      width: 30px;
-      height: 30px;
-      filter: blur(1px);
-    }
-
-    .container_chat_bot .container-chat-options .chat {
+    .chat {
       display: flex;
       flex-direction: column;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(255, 255, 255, 0.15);
       border-radius: 15px;
       width: 100%;
       overflow: hidden;
     }
 
-    .container_chat_bot .chat .chat-bot textarea {
+    .chat input, .chat textarea {
       background-color: transparent;
-      border-radius: 16px;
       border: none;
-      width: 100%;
-      height: 50px;
-      color: #ffffff;
-      font-family: sans-serif;
+      color: white;
       font-size: 14px;
       padding: 10px;
-      resize: none;
       outline: none;
+      width: 100%;
+      resize: none;
     }
 
-    .container_chat_bot .chat .options {
+    .chat input {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .options {
       display: flex;
       justify-content: flex-end;
-      align-items: flex-end;
       padding: 10px;
     }
 
     .btn-submit {
-      padding: 4px 6px;
+      padding: 6px 10px;
       background-image: linear-gradient(to top, #292929, #555555, #292929);
       border-radius: 10px;
       border: none;
@@ -115,90 +125,74 @@
       transform: scale(1.1);
     }
 
-    /* TARJETAS DE NOTAS (From Uiverse.io by alexruix) */
-    .card {
-      width: 190px;
-      height: 254px;
-      border-radius: 20px;
-      background: #f5f5f5;
-      position: absolute;
-      padding: 1.8rem;
-      border: 2px solid #c3c6ce;
-      transition: 0.5s ease-out;
-      overflow: visible;
-      animation: aparecer 0.5s ease forwards;
+    /* ESTILO DE LAS NOTAS (tipo Facebook) */
+    #listaNotas {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    @keyframes aparecer {
-      from {opacity: 0; transform: scale(0.8);}
-      to {opacity: 1; transform: scale(1);}
+    .card {
+      width: 100%;
+      background: #f5f5f5;
+      border-radius: 20px;
+      padding: 1.5rem;
+      border: 2px solid #c3c6ce;
+      transition: 0.3s ease-out;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     .card-details {
       color: black;
-      height: 100%;
+      display: flex;
+      flex-direction: column;
       gap: .5em;
-      display: grid;
-      place-content: center;
-      text-align: center;
     }
 
     .text-title {
-      font-size: 1.2em;
+      font-size: 1.3em;
       font-weight: bold;
     }
 
     .text-body {
-      color: rgb(134, 134, 134);
-      font-size: 0.9em;
+      color: rgb(80, 80, 80);
     }
 
     .card-button {
-      transform: translate(-50%, 125%);
-      width: 60%;
-      border-radius: 1rem;
+      align-self: flex-end;
+      margin-top: 10px;
       border: none;
       background-color: #008bf8;
       color: #fff;
-      font-size: 1rem;
-      padding: .5rem 1rem;
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      opacity: 0;
-      transition: 0.3s ease-out;
+      font-size: 0.9rem;
+      padding: .4rem .8rem;
+      border-radius: 8px;
       cursor: pointer;
+      transition: 0.3s;
     }
 
-    .card:hover {
-      border-color: #008bf8;
-      box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    .card-button:hover {
+      background-color: #006fc0;
     }
-
-    .card:hover .card-button {
-      transform: translate(-50%, 50%);
-      opacity: 1;
-    }
-
-    /* CONTENEDOR DE NOTAS FLOTANTES */
-    #listaNotas {
-      position: relative;
-      width: 100%;
-      height: 0;
-    }
-
   </style>
 </head>
 <body>
 
   <h1>📝 Mis Notas</h1>
 
-  <div class="container_chat_bot">
+  <!-- BOTÓN CREAR NOTA -->
+  <button class="boton-crear" onclick="mostrarChat()">
+    <span>🪶 Crear Nota</span>
+  </button>
+
+  <!-- FORMULARIO CHAT -->
+  <div class="container_chat_bot" id="chatContainer">
     <div class="container-chat-options">
       <div class="chat">
-        <div class="chat-bot">
-          <textarea id="nota" placeholder="Escribe tu nota..."></textarea>
-        </div>
+        <input type="text" id="titulo" placeholder="Título de tu nota">
+        <textarea id="nota" placeholder="Escribe tu nota..."></textarea>
         <div class="options">
           <button class="btn-submit" onclick="guardarNota()">
             <i>➤</i>
@@ -208,48 +202,63 @@
     </div>
   </div>
 
+  <!-- LISTA DE NOTAS -->
   <div id="listaNotas"></div>
 
   <script>
     let notas = [];
 
-    function guardarNota() {
-      const texto = document.getElementById('nota').value.trim();
-      if (texto === '') return alert('Escribe una nota antes de guardar.');
-
-      const nuevaNota = { id: Date.now(), texto, likes: 0 };
-      notas.push(nuevaNota);
-      document.getElementById('nota').value = '';
-      mostrarNotaFlotante(nuevaNota);
+    function mostrarChat() {
+      const chat = document.getElementById('chatContainer');
+      chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    function mostrarNotaFlotante(nota) {
-      const contenedor = document.getElementById('listaNotas');
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.style.top = `${Math.random() * 60 + 20}vh`;
-      card.style.left = `${Math.random() * 70 + 10}vw`;
+    function guardarNota() {
+      const titulo = document.getElementById('titulo').value.trim();
+      const texto = document.getElementById('nota').value.trim();
 
-      card.innerHTML = `
-        <div class="card-details">
-          <p class="text-title">Nota #${notas.length}</p>
-          <p class="text-body">${nota.texto}</p>
-        </div>
-        <button class="card-button" onclick="likeNota(${nota.id})">❤️ ${nota.likes}</button>
-      `;
-      contenedor.appendChild(card);
+      if (!titulo || !texto) return alert('Completa el título y el texto.');
+
+      const nuevaNota = {
+        id: Date.now(),
+        titulo,
+        texto,
+        likes: 0,
+        liked: false
+      };
+
+      notas.unshift(nuevaNota); // Insertar al inicio
+      document.getElementById('titulo').value = '';
+      document.getElementById('nota').value = '';
+      mostrarNotas();
+      document.getElementById('chatContainer').style.display = 'none';
+    }
+
+    function mostrarNotas() {
+      const contenedor = document.getElementById('listaNotas');
+      contenedor.innerHTML = '';
+
+      notas.forEach(nota => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-details">
+            <p class="text-title">${nota.titulo}</p>
+            <p class="text-body">${nota.texto}</p>
+          </div>
+          <button class="card-button" onclick="likeNota(${nota.id})">❤️ ${nota.likes}</button>
+        `;
+        contenedor.appendChild(card);
+      });
     }
 
     function likeNota(id) {
       const nota = notas.find(n => n.id === id);
-      if (nota) nota.likes++;
-      actualizarLikes();
-    }
+      if (!nota || nota.liked) return; // Solo un like permitido
 
-    function actualizarLikes() {
-      document.querySelectorAll('.card-button').forEach((btn, index) => {
-        btn.innerHTML = `❤️ ${notas[index].likes}`;
-      });
+      nota.likes++;
+      nota.liked = true;
+      mostrarNotas();
     }
   </script>
 </body>
