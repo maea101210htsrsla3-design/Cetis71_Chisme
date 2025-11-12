@@ -16,6 +16,7 @@
       min-height: 100vh;
       margin: 0;
       color: white;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -23,6 +24,7 @@
       text-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
+    /* CHAT BOX PRINCIPAL */
     .container_chat_bot {
       display: flex;
       flex-direction: column;
@@ -88,23 +90,9 @@
 
     .container_chat_bot .chat .options {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: flex-end;
       padding: 10px;
-    }
-
-    .btns-add button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      font-size: 18px;
-    }
-
-    .btns-add button:hover {
-      transform: translateY(-3px);
-      color: #ffffff;
     }
 
     .btn-submit {
@@ -127,43 +115,76 @@
       transform: scale(1.1);
     }
 
-    /* Lista de notas */
-    #listaNotas {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: 90%;
-      max-width: 400px;
+    /* TARJETAS DE NOTAS (From Uiverse.io by alexruix) */
+    .card {
+      width: 190px;
+      height: 254px;
+      border-radius: 20px;
+      background: #f5f5f5;
+      position: absolute;
+      padding: 1.8rem;
+      border: 2px solid #c3c6ce;
+      transition: 0.5s ease-out;
+      overflow: visible;
+      animation: aparecer 0.5s ease forwards;
     }
 
-    .nota {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    @keyframes aparecer {
+      from {opacity: 0; transform: scale(0.8);}
+      to {opacity: 1; transform: scale(1);}
     }
 
-    .nota p {
-      margin: 0;
-      flex: 1;
-      color: #fff;
+    .card-details {
+      color: black;
+      height: 100%;
+      gap: .5em;
+      display: grid;
+      place-content: center;
+      text-align: center;
     }
 
-    .nota button {
-      background: transparent;
+    .text-title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .text-body {
+      color: rgb(134, 134, 134);
+      font-size: 0.9em;
+    }
+
+    .card-button {
+      transform: translate(-50%, 125%);
+      width: 60%;
+      border-radius: 1rem;
       border: none;
-      color: #ff4081;
+      background-color: #008bf8;
+      color: #fff;
+      font-size: 1rem;
+      padding: .5rem 1rem;
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      opacity: 0;
+      transition: 0.3s ease-out;
       cursor: pointer;
-      font-size: 18px;
-      transition: transform 0.2s ease;
     }
 
-    .nota button:hover {
-      transform: scale(1.2);
+    .card:hover {
+      border-color: #008bf8;
+      box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .card:hover .card-button {
+      transform: translate(-50%, 50%);
+      opacity: 1;
+    }
+
+    /* CONTENEDOR DE NOTAS FLOTANTES */
+    #listaNotas {
+      position: relative;
+      width: 100%;
+      height: 0;
     }
 
   </style>
@@ -179,10 +200,6 @@
           <textarea id="nota" placeholder="Escribe tu nota..."></textarea>
         </div>
         <div class="options">
-          <div class="btns-add">
-            <button title="Agregar emoji">😊</button>
-            <button title="Adjuntar archivo">📎</button>
-          </div>
           <button class="btn-submit" onclick="guardarNota()">
             <i>➤</i>
           </button>
@@ -194,7 +211,6 @@
   <div id="listaNotas"></div>
 
   <script>
-    // --- Funciones simuladas (puedes conectar con backend después) ---
     let notas = [];
 
     function guardarNota() {
@@ -204,29 +220,38 @@
       const nuevaNota = { id: Date.now(), texto, likes: 0 };
       notas.push(nuevaNota);
       document.getElementById('nota').value = '';
-      mostrarNotas();
+      mostrarNotaFlotante(nuevaNota);
+    }
+
+    function mostrarNotaFlotante(nota) {
+      const contenedor = document.getElementById('listaNotas');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.top = `${Math.random() * 60 + 20}vh`;
+      card.style.left = `${Math.random() * 70 + 10}vw`;
+
+      card.innerHTML = `
+        <div class="card-details">
+          <p class="text-title">Nota #${notas.length}</p>
+          <p class="text-body">${nota.texto}</p>
+        </div>
+        <button class="card-button" onclick="likeNota(${nota.id})">❤️ ${nota.likes}</button>
+      `;
+      contenedor.appendChild(card);
     }
 
     function likeNota(id) {
       const nota = notas.find(n => n.id === id);
       if (nota) nota.likes++;
-      mostrarNotas();
+      actualizarLikes();
     }
 
-    function mostrarNotas() {
-      const contenedor = document.getElementById('listaNotas');
-      contenedor.innerHTML = '';
-
-      notas.forEach(nota => {
-        const div = document.createElement('div');
-        div.className = 'nota';
-        div.innerHTML = `
-          <p>${nota.texto}</p>
-          <button onclick="likeNota(${nota.id})">❤️ ${nota.likes}</button>
-        `;
-        contenedor.appendChild(div);
+    function actualizarLikes() {
+      document.querySelectorAll('.card-button').forEach((btn, index) => {
+        btn.innerHTML = `❤️ ${notas[index].likes}`;
       });
     }
   </script>
 </body>
 </html>
+
